@@ -26,8 +26,6 @@ data "aws_ami" "al2023" {
 resource "aws_instance" "bastion" {
   count = var.enable_bastion ? 1 : 0
 
-  subnet_id = module.vpc.public_subnets[0]
-
   launch_template {
     id      = aws_launch_template.launch_template.id
     version = "$Latest"
@@ -35,16 +33,17 @@ resource "aws_instance" "bastion" {
 }
 
 resource "aws_launch_template" "launch_template" {
-  name                   = "bastion-template-${var.environment}"
-  image_id               = data.aws_ami.al2023.id
-  instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.bastion.id]
+  name          = "bastion-template-${var.environment}"
+  image_id      = data.aws_ami.al2023.id
+  instance_type = var.instance_type
 
   iam_instance_profile {
     name = aws_iam_instance_profile.ssm_profile.name
   }
 
   network_interfaces {
+    subnet_id                   = module.vpc.public_subnets[0]
+    security_groups             = [aws_security_group.bastion.id]
     associate_public_ip_address = true
   }
 
