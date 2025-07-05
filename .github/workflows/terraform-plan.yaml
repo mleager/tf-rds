@@ -3,6 +3,9 @@ name: Terraform Plan
 on:
   pull_request:
 
+  # testing
+  workflow_dispatch:
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
