@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONFIG_DIRECTORY: ./terraform
-      STATE_BUCKET: tf-state-bucket
+      STATE_BUCKET: tf-state-8864
       AWS_REGION: us-east-1
       PROJECT_NAME: ${{ github.event.repository.name }}
       ENVIRONMENT: development
