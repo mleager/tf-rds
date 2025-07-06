@@ -1,10 +1,10 @@
-data "aws_ami" "al2023" {
+data "aws_ami" "linux" {
   most_recent = true
   owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["al2023-ami-2023*"]
+    values = var.use_al2023 ? ["al2023-ami-2023*"] : ["ubuntu/images/hvm-ssd*ubuntu-noble*"]
   }
 
   filter {
@@ -23,6 +23,13 @@ data "aws_ami" "al2023" {
   }
 }
 
+locals {
+  al2023_path = "${path.module}/script/psql-setup-al2023.sh"
+  ubuntu_path = "${path.module}/script/psql-setup-ubuntu.sh"
+
+  setup_script = var.use_al2023 ? local.al2023_path : local.ubuntu_path
+}
+
 resource "aws_instance" "bastion" {
   count = var.enable_bastion ? 1 : 0
 
@@ -34,7 +41,7 @@ resource "aws_instance" "bastion" {
 
 resource "aws_launch_template" "launch_template" {
   name          = "bastion-template-${var.environment}"
-  image_id      = data.aws_ami.al2023.id
+  image_id      = data.aws_ami.linux.id
   instance_type = var.instance_type
 
   iam_instance_profile {
@@ -47,7 +54,15 @@ resource "aws_launch_template" "launch_template" {
     associate_public_ip_address = true
   }
 
-  user_data = base64encode(templatefile("${path.module}/script/psql-setup.sh", {
+  # user_data = base64encode(
+  #   templatefile(var.use_al2023 ?
+  #     "${path.module}/script/psql-setup-al2023.sh" :
+  #     "${path.module}/script/psql-setup-ubuntu.sh", {
+  #       db_password = data.aws_ssm_parameter.db_password.name
+  #   })
+  # )
+
+  user_data = base64encode(templatefile(local.setup_script, {
     db_password = data.aws_ssm_parameter.db_password.name
   }))
 

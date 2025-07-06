@@ -22,6 +22,12 @@ variable "enable_bastion" {
   description = "Enable bastion host"
 }
 
+variable "use_al2023" {
+  type        = bool
+  default     = true
+  description = "Use Amazon Linux 2023 instead of Ubuntu"
+}
+
 variable "instance_type" {
   type        = string
   default     = "t2.micro"

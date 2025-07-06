@@ -17,7 +17,13 @@ data "aws_iam_policy_document" "rds_describe" {
   statement {
     effect    = "Allow"
     actions   = ["rds:Describe*"]
-    resources = ["${aws_db_instance.postgres.arn}"]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestedRegion"
+      values   = [var.region]
+    }
   }
 }
 
