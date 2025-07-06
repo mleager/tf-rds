@@ -36,6 +36,6 @@ jobs:
         key: ${{ env.PROJECT_NAME }}/terraform.tfstate
         region: ${{ env.AWS_REGION }}
         var_file: terraform.tfvars.${{ env.ENVIRONMENT }}
-        make_pr_comment: true
+        make_pr_comment: false
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
