@@ -7,17 +7,20 @@ on:
         description: 'Type "DESTROY" to confirm resource destruction'
         required: true
 
+env: 
+  ENVINRONEMENT: development
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    # environment: ${{ env.ENVIRONMENT }}
     env:
       CONFIG_DIRECTORY: ./terraform
       STATE_BUCKET: tf-state-8864
       AWS_REGION: us-east-1
-      ENVIRONMENT: development
       PROJECT_NAME: ${{ github.event.repository.name }}
+      ENVIRONMENT: ${{ env.ENVIRONMENT ))
       VAR_FILE: terraform.tfvars.${{ env.ENVIRONMENT }}
+    # environment: ${{ env.ENVIRONMENT }}
     permissions:
       contents: write
       id-token: write
