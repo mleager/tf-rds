@@ -37,4 +37,4 @@ jobs:
         var_file: terraform.tfvars.${{ env.ENVIRONMENT }}
         make_commit_comment: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
-
+        confirm_destroy: ${{ github.event.inputs.confirm_destroy }}
