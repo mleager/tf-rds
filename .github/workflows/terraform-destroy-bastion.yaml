@@ -7,9 +7,6 @@ on:
         description: 'Type "DESTROY" to confirm resource destruction'
         required: true
 
-env: 
-  ENVIRONMENT: development
-
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -18,8 +15,7 @@ jobs:
       STATE_BUCKET: tf-state-8864
       AWS_REGION: us-east-1
       PROJECT_NAME: ${{ github.event.repository.name }}
-      ENVIRONMENT: ${{ env.ENVIRONMENT ))
-      VAR_FILE: terraform.tfvars.${{ env.ENVIRONMENT }}
+      ENVIRONMENT: development
     # environment: ${{ env.ENVIRONMENT }}
     permissions:
       contents: write
@@ -30,6 +26,9 @@ jobs:
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
+
+    - name: Set VAR_FILE
+      run: echo "VAR_FILE=terraform.tfvars.${ENVIRONMENT}" >> $GITHUB_ENV
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
