@@ -8,7 +8,7 @@ on:
         required: true
 
 env: 
-  ENVINRONEMENT: development
+  ENVIRONMENT: development
 
 jobs:
   terraform:
