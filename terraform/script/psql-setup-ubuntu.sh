@@ -32,9 +32,8 @@ cat <<'EOF' > "$HOME/rds_info/connect.sh"
 ENDPOINT=$(cat "$HOME/rds_info/endpoint.txt")
 DBNAME=$(cat "$HOME/rds_info/dbname.txt")
 
-# Securely fetch password and write to .pgpass
 aws ssm get-parameter \
-  --name "some-test-name" \
+  --name "${db_password}" \
   --with-decryption \
   --query "Parameter.Value" \
   --output text > "$HOME/.pgpass"

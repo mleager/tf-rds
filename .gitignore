@@ -2,4 +2,5 @@
 */*.tfstate*
 */script/temp
 */*.tfvars
+*/oidc.tf
 
